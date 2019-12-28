@@ -1,26 +1,21 @@
-# Datastreams-Archiver
-Archiving Tweets from the world leaders to Arweave's Permafeeds blockchain
+# Datastream Archiver
 
-## TODO 
-- Build a proper log system
-- Authentification should be in a seperate file
-- Documentation about tags and data scheme
-- Could be extended to enable arguments
-    - who (twitter accound)
-    - when (from now to date)
-    - where (wallet to save those informations)
-- Bot could have tests
+Archiving Tweets from the world leaders to Arweave's Permafeed blockchain.
 
-## USING
-
-    ...
-
-## CONTRIBUTING
+## Setting up this bot
 
 You can start by creating your virtual environment : `python3 -m venv venv/`
 
-If you have issue with the venv creation, the official documentation : https://docs.python.org/3/library/venv.html
-
 To use a venv : `source venv/bin/activate`
 
-Adding dependency : `pip3 install -r requirements.txt`
+Adding dependencies : `pip3 install -r requirements.txt`
+
+## Using this bot
+
+Currently under heavy develpment.
+
+Features will be added over time but for the moment you can query Satan's Tweets by using
+
+    `python3 main.py`
+
+
