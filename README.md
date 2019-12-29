@@ -17,5 +17,3 @@ Currently under heavy develpment.
 Features will be added over time but for the moment you can query Satan's Tweets by using
 
     python3 main.py
-
-

@@ -24,10 +24,11 @@ file_handler = RotatingFileHandler(
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
-stream_handler = logging.StreamHandler()
-logger.addHandler(stream_handler)
-
 if __name__ == '__main__':
     logger.info('INFO')
     logger.error('ERROR')
     logger.error('TEST LOG ERROR')
+    """
+    ISSUE : Switching to a definition or class create recursion in logging, 
+            not sure if staying like scale for multiple file...
+    """
