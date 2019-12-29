@@ -1,8 +1,9 @@
 from json import load
-from os import makedirs, path
+from os import makedirs, path, getenv
 from requests import get, post, codes
 from logs import logger
 from argparse import ArgumentParser
+from dotenv import load_dotenv
 
 """"
 Defining arguments parser to use command line
@@ -15,6 +16,10 @@ parser.add_argument('-t', '--tweets', dest='tweets', required=False,
 parser.add_argument('-a', '--account', dest='screen_name', required=False,
     help="Querying Tweets from a specific Account")
 args = parser.parse_args()
+load_dotenv()
+
+CONSUMER_API_KEY = getenv('CONSUMER_API_KEY')
+API_SECRET_KEY = getenv('API_SECRET_KEY')
 
 
 class TwitterFeed():
@@ -29,8 +34,6 @@ class TwitterFeed():
 
     # Class method
     def get_auth_token(self) -> None:
-        CONSUMER_API_KEY = 'ra14bd0Uh4HucF6NJIXSnp8uk'
-        API_SECRET_KEY = 'kt0ACGvJ8jdob7a5WR6F3wxRUFkAv1bZFSnefrabCDDvrt0R4P'
         body = { 
             'grant_type':'client_credentials' 
         }
