@@ -8,7 +8,9 @@ __pycache__/
 
 #LOGS
 logs/
-*.json
+
+#DATA USED DURING DEV
+data/
 
 # C extensions
 *.so

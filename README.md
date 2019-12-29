@@ -14,6 +14,16 @@ Adding dependencies : `pip3 install -r requirements.txt`
 
 Currently under heavy develpment.
 
-Features will be added over time but for the moment you can query Satan's Tweets by using
+You need to have Twitter developer credentials. Replace the current consumer_key and secret_key by you own ;)
 
-    python3 main.py
+Actually you can interact with this CLI by using :
+
+    python3 tweeter-feed.py
+
+In futur you should be querying stuff following this syntax 
+
+`python3 tweeter-feed.py {who: mocked_list if empty} {nbr_days} {type_of_save}`
+
+`python3 tweeter-feed.py 7day fs`
+
+`python3 tweeter-feed.py trump 30day permafeed`
