@@ -1,3 +1,4 @@
+import json
 from os import makedirs, path
 from requests import get, post, codes
 from logs import logger
@@ -50,9 +51,6 @@ class TwitterFeed():
             self.get_global_query_through_tweets(getArgument)
         if(args.list != None):
             getArgument = vars(args)['list']
-            if(getArgument == 'mocked_list.py'):
-                from mocked_list import list_to_query
-                getArgument = list_to_query
             self.query_api_from_mocked_list(getArgument)
         if(args.account != None):
             getArgument = vars(args)['account']
@@ -66,18 +64,20 @@ class TwitterFeed():
         print('Querying Tweets from ' + QUERY_PARAMETER + "'s account.")
         self.writing_in_filesystem('ACCOUNT', QUERY_PARAMETER, res.text)
 
-    def query_api_from_mocked_list(self, LIST_TO_QUERY) -> str:
-        for item in LIST_TO_QUERY:
-            QUERY_PARAMETER = item['account']
-            print('Querying Tweets from: ' + QUERY_PARAMETER)
-            
-            QUERY_URL = (self.TWITTER_API_URL + self.SEARCH_ON_TWEETS_URL + 
-                    '(from:' + QUERY_PARAMETER +
-                    ')until%3A' + '2019-12-30' + 'since%3A' + '2019-12-01' +
-                    '&src=typed_query&f=live'
-            )
-            res = get(QUERY_URL, headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN })
-            self.writing_in_filesystem('USER', QUERY_PARAMETER, res.text)
+    def query_api_from_mocked_list(self, LIST_TO_QUERY_FROM_FILE) -> str:
+        with open(LIST_TO_QUERY_FROM_FILE, 'r') as inputfile:
+            data = json.load(inputfile)
+            for item in data:
+                QUERY_PARAMETER = item['account']
+                print('Querying Tweets from: ' + QUERY_PARAMETER)
+                
+                QUERY_URL = (self.TWITTER_API_URL + self.SEARCH_ON_TWEETS_URL + 
+                        '(from:' + QUERY_PARAMETER +
+                        ')until%3A' + '2019-12-30' + 'since%3A' + '2019-12-01' +
+                        '&src=typed_query&f=live'
+                )
+                res = get(QUERY_URL, headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN })
+                self.writing_in_filesystem('USER', QUERY_PARAMETER, res.text)
 
     def get_global_query_through_tweets(self, QUERY_PARAMETER) -> object:
         res = get(
