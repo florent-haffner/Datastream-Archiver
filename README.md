@@ -14,18 +14,12 @@ Archiving Tweets from the world leaders to Arweave's Permafeed blockchain.
 
 ## Using this bot
 
-You can query following this syntax :
-
-`python3 tweeter-feed.py -a {account_to_query}`
-
-`python3 tweeter-feed.py -t {tweets_tag}`
-
-`python3 tweeter-feed.py -l {location_of_your_json_file}`
-
-This will open the selected JSON file, query the Twitter API based on the each object key 'account' and store results in your filesystem.
-
-A very simple and efficient usage will be : 
+A very simple usage :
 
     python3 twitter-feed.py -l mocked_list.json
+
+You can also search by tweets-tag or account. Documentation :
+
+    python3 twitter-feed.py -h
 
 Next step : connecting to Arweave blockhain network and store every correct data.
