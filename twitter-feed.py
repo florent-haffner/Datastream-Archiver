@@ -6,7 +6,6 @@ class Connection():
 
     def __init__(self):
         self.get_auth_token()
-        self.get_response_api('(from%3As8n)&src=typed_query')
 
     def get_auth_token(self) -> None:
         CONSUMER_API_KEY = 'ra14bd0Uh4HucF6NJIXSnp8uk'
@@ -18,9 +17,17 @@ class Connection():
             auth=(CONSUMER_API_KEY, API_SECRET_KEY),
             data=body
         )
-
         if(res.status_code == codes.ok):
             self.BEARER_TOKEN = res.json()['access_token']
+            self.ask_user_for_query()
+        if(res.status_code > codes.ok):
+            error_message = 'Issue during connection to Twitter, verify you credentials or the URL!'
+            print(error_message)
+
+    def ask_user_for_query(self):
+        print('Tell me what Twitter account should I query?')
+        QUERY_PARAMETER = input()
+        self.get_response_api(QUERY_PARAMETER)
 
     def get_response_api(self, parameter_to_query) -> object:
         res = get(

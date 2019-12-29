@@ -6,6 +6,9 @@ __pycache__/
 #IDE
 .vscode/
 
+#LOGS
+logs/
+
 # C extensions
 *.so
 
