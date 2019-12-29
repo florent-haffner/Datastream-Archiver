@@ -16,7 +16,7 @@ Archiving Tweets from the world leaders to Arweave's Permafeed blockchain.
 
 A very simple usage :
 
-    python3 twitter-feed.py -l mocked_list.json
+    python3 twitter-feed.py -l account_list_to_query.json
 
 You can also search by tweets-tag or account. Documentation :
 
