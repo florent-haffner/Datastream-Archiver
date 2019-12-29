@@ -16,8 +16,9 @@ parser.add_argument('-t', '--tweets', dest='tweets', required=False,
 parser.add_argument('-a', '--account', dest='screen_name', required=False,
     help="Querying Tweets from a specific Account")
 args = parser.parse_args()
-load_dotenv()
 
+# Get API credentials from .env
+load_dotenv()
 CONSUMER_API_KEY = getenv('CONSUMER_API_KEY')
 API_SECRET_KEY = getenv('API_SECRET_KEY')
 
