@@ -5,6 +5,7 @@ __pycache__/
 
 #IDE
 .vscode/
+.DS_Store
 
 #LOGS
 logs/
