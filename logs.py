@@ -6,6 +6,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+# Find a way to grab __name__ from the imported file
 formatter = logging.Formatter('%(asctime)s :: FROM: %(name)s :: %(levelname)s :: %(message)s')
 
 log_name = str(datetime.now().strftime("%Y-%m-%d") + '.log')

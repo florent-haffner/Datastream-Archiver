@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 from dotenv import load_dotenv
 
 """"
-Defining arguments parser to use command line
+Defining arguments to use in command line
 """
 parser = ArgumentParser(description="BOT used to Query Twitter's API")
 parser.add_argument('-l', '--list', required=False, 
@@ -27,7 +27,8 @@ class TwitterFeed():
     # Class Attributes
     TW_API_URL = 'https://api.twitter.com/'
     BEARER_TOKEN = ''
-    SEARCH_ENDPOINT = '1.1/search/tweets.json?q='
+    TWEETS_SEARCH_ENDPOINT = '1.1/search/tweets.json?q='
+    ACCOUNT_SEARCH_ENDPOINT = '1.1/statuses/user_timeline.json?screen_name='
 
     # Constructor
     def __init__(self):
@@ -63,13 +64,14 @@ class TwitterFeed():
             self.get_tweets_from_a_specific_user(getArgument)
 
     def get_tweets_from_a_specific_user(self, QUERY_PARAMETER) -> None:
+        QUERY_URL = (
+            self.TW_API_URL + self.ACCOUNT_SEARCH_ENDPOINT + QUERY_PARAMETER
+        )
         res = get(
-            self.TW_API_URL + self.SEARCH_ENDPOINT + '(from:' + QUERY_PARAMETER 
-                + ')&src='+ 'typed_query',
-            headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN}
+            QUERY_URL, headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN}
         ) 
         print('Querying Tweets from ' + QUERY_PARAMETER + "'s account.")
-        self.cleaning_data_and_calculate_with_tweets_frequency('USER', QUERY_PARAMETER, res.json())
+        self.calculate_tweets_frequency('USER', QUERY_PARAMETER, res.json())
 
     def query_api_from_mocked_list(self, LIST_TO_QUERY_FROM_FILE) -> None:
         with open(LIST_TO_QUERY_FROM_FILE, 'r') as inputfile:
@@ -78,36 +80,40 @@ class TwitterFeed():
                 QUERY_PARAMETER = item['screen_name']
                 print('Querying Tweets from: ' + QUERY_PARAMETER)
                 
-                QUERY_URL = (self.TW_API_URL + self.SEARCH_ENDPOINT + 
-                        '(from:' + QUERY_PARAMETER +
-                        ')until%3A' + '2019-12-30' + 'since%3A' + '2019-12-01' +
-                        '&src=' + 'typed_query&f=live'
+                QUERY_URL = (
+                    self.TW_API_URL + self.ACCOUNT_SEARCH_ENDPOINT + QUERY_PARAMETER
                 )
-                res = get(QUERY_URL, headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN })
-                self.cleaning_data_and_calculate_with_tweets_frequency('USER', QUERY_PARAMETER, res.json())
+                res = get(
+                    QUERY_URL, headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN }
+                )
+                self.calculate_tweets_frequency('USER', QUERY_PARAMETER, res.json())
 
     def get_global_query_through_tweets(self, QUERY_PARAMETER) -> object:
+        QUERY_URL = (
+            self.TW_API_URL + self.TWEETS_SEARCH_ENDPOINT + QUERY_PARAMETER,
+        )
         res = get(
-            self.TW_API_URL + self.SEARCH_ENDPOINT + QUERY_PARAMETER,
-            headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN}
+            QUERY_URL, headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN}
         )
         print('Querying Tweets based on ' + QUERY_PARAMETER + "'s tag.")
-        self.cleaning_data_and_calculate_with_tweets_frequency('TWEETS', QUERY_PARAMETER, res.json())
+        self.cleaning_tweets_data('TWEETS', QUERY_PARAMETER, res.json())
 
-    def cleaning_data_and_calculate_with_tweets_frequency(self, TYPE, QUERY_PARAMETER, API_RESULT):
+    def cleaning_tweets_data(self, TYPE, QUERY_PARAMETER, API_RESULT):
         try:
-            DATA = API_RESULT['statuses'] # Used to keep content, not query metadata
-
-            first_tweet_date = DATA[0]['created_at']
-            last_tweet_date = DATA[-1]['created_at']
-            print('First tweet date : ' + first_tweet_date)
-            print('Last tweet date: ' + last_tweet_date + '\n')
-
-            self.writing_in_filesystem(TYPE, QUERY_PARAMETER, DATA)
+            DATA = API_RESULT['statuses'] # Used to get tweets content, not metadata
+            self.calculate_tweets_frequency(TYPE, QUERY_PARAMETER, DATA)
         except IndexError:
-            error_message = QUERY_PARAMETER + " hasen't write Tweet this week !"
+            error_message = QUERY_PARAMETER + " haven't write tweets this week !"
             logger.info(error_message)
             print(error_message + "\n")
+
+    def calculate_tweets_frequency(self, TYPE, QUERY_PARAMETER, DATA):
+        first_tweet_date = DATA[0]['created_at']
+        last_tweet_date = DATA[-1]['created_at']
+        print('First tweet date : ' + first_tweet_date)
+        print('Last tweet date: ' + last_tweet_date + '\n')
+
+        self.writing_in_filesystem(TYPE, QUERY_PARAMETER, DATA)
 
     def writing_in_filesystem(self, TYPE, QUERY_PARAMETER, DATA) -> None:
         defined_folder = './data'
