@@ -90,7 +90,7 @@ class TwitterFeed():
 
     def get_global_query_through_tweets(self, QUERY_PARAMETER) -> object:
         QUERY_URL = (
-            self.TW_API_URL + self.TWEETS_SEARCH_ENDPOINT + QUERY_PARAMETER,
+            self.TW_API_URL + self.TWEETS_SEARCH_ENDPOINT + QUERY_PARAMETER
         )
         res = get(
             QUERY_URL, headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN}

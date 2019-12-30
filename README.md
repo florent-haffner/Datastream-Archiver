@@ -10,7 +10,7 @@ Archiving Tweets from the world leaders to Arweave's Permafeed blockchain.
 
 3. Adding dependencies : `pip3 install -r requirements.txt`
 
-4. You need to have Twitter developer credentials. Replace the current consumer_key and secret_key by you own ;)
+4. You need to have Twitter developer credentials. Replace the .env credentials by you own ;)
 
 ## Using this bot
 
