@@ -4,22 +4,18 @@ Archiving Tweets from the world leaders to Arweave's Permafeed blockchain.
 
 ## Setting up this bot
 
-1. You can start by creating your virtual environment : `python3 -m venv venv/`
+`npm install`
 
-2. To use the venv : `source venv/bin/activate`
-
-3. Adding dependencies : `pip3 install -r requirements.txt`
-
-4. You need to have Twitter developer credentials. Replace the .env credentials by you own ;)
+You need to have Twitter developer credentials. Replace the .env credentials by you own ;)
 
 ## Using this bot
 
 A very simple usage :
 
-    python3 twitter-feed.py -l account_list_to_query.json
+    npm start
 
 You can also search by tweets-tag or account. Documentation :
 
-    python3 twitter-feed.py -h
+    node index.js -h
 
 Next step : connecting to Arweave blockhain network and store every correct data.

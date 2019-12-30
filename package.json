@@ -1,0 +1,27 @@
+{
+  "name": "datastream-archiver",
+  "version": "1.0.0",
+  "description": "Archiving Tweets to Arweave's Permafeed blockchain",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "node-fetch": "^2.6.0",
+    "yargs": "^15.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js -l account_list_to_query.json",
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nelth-fr/Datastream-Archiver.git"
+  },
+  "author": "nelth_fr",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/nelth-fr/Datastream-Archiver/issues"
+  },
+  "homepage": "https://github.com/nelth-fr/Datastream-Archiver#readme"
+}
