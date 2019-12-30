@@ -1,4 +1,4 @@
-from json import load
+from json import load, dump
 from os import makedirs, path, getenv
 from requests import get, post, codes
 from logs import logger
@@ -62,16 +62,16 @@ class TwitterFeed():
             getArgument = vars(args)['screen_name']
             self.get_tweets_from_a_specific_user(getArgument)
 
-    def get_tweets_from_a_specific_user(self, QUERY_PARAMETER) -> object:
+    def get_tweets_from_a_specific_user(self, QUERY_PARAMETER) -> None:
         res = get(
             self.TW_API_URL + self.SEARCH_ENDPOINT + '(from:' + QUERY_PARAMETER 
                 + ')&src='+ 'typed_query',
             headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN}
         ) 
         print('Querying Tweets from ' + QUERY_PARAMETER + "'s account.")
-        self.writing_in_filesystem('USER', QUERY_PARAMETER, res.text)
+        self.cleaning_data_and_calculate_with_tweets_frequency('USER', QUERY_PARAMETER, res.json())
 
-    def query_api_from_mocked_list(self, LIST_TO_QUERY_FROM_FILE) -> str:
+    def query_api_from_mocked_list(self, LIST_TO_QUERY_FROM_FILE) -> None:
         with open(LIST_TO_QUERY_FROM_FILE, 'r') as inputfile:
             data = load(inputfile)
             for item in data:
@@ -84,7 +84,7 @@ class TwitterFeed():
                         '&src=' + 'typed_query&f=live'
                 )
                 res = get(QUERY_URL, headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN })
-                self.writing_in_filesystem('USER', QUERY_PARAMETER, res.text)
+                self.cleaning_data_and_calculate_with_tweets_frequency('USER', QUERY_PARAMETER, res.json())
 
     def get_global_query_through_tweets(self, QUERY_PARAMETER) -> object:
         res = get(
@@ -92,16 +92,31 @@ class TwitterFeed():
             headers={ 'Authorization':'Bearer ' + self.BEARER_TOKEN}
         )
         print('Querying Tweets based on ' + QUERY_PARAMETER + "'s tag.")
-        self.writing_in_filesystem('TWEETS', QUERY_PARAMETER, res.text)
+        self.cleaning_data_and_calculate_with_tweets_frequency('TWEETS', QUERY_PARAMETER, res.json())
 
-    def writing_in_filesystem(self, TYPE, QUERY_PARAMETER, API_RESULT) -> None:
+    def cleaning_data_and_calculate_with_tweets_frequency(self, TYPE, QUERY_PARAMETER, API_RESULT):
+        try:
+            DATA = API_RESULT['statuses'] # Used to keep content, not query metadata
+
+            first_tweet_date = DATA[0]['created_at']
+            last_tweet_date = DATA[-1]['created_at']
+            print('First tweet date : ' + first_tweet_date)
+            print('Last tweet date: ' + last_tweet_date + '\n')
+
+            self.writing_in_filesystem(TYPE, QUERY_PARAMETER, DATA)
+        except IndexError:
+            error_message = QUERY_PARAMETER + " hasen't write Tweet this week !"
+            logger.info(error_message)
+            print(error_message + "\n")
+
+    def writing_in_filesystem(self, TYPE, QUERY_PARAMETER, DATA) -> None:
         defined_folder = './data'
         if not path.exists(defined_folder):
             makedirs(defined_folder)
         filename = f'{defined_folder}/{TYPE}' + '-' + f'{QUERY_PARAMETER}' + '.json'
 
         with open(filename, 'w') as file:
-            file.write(API_RESULT)
+            dump(DATA, file)
 
     
 if __name__ == '__main__':
