@@ -4,9 +4,9 @@ Archiving Tweets from the world leaders to Arweave's Permafeed blockchain.
 
 ## Setting up this bot
 
-`npm install`
+1. `npm install`
 
-You need to have Twitter developer credentials. Replace the .env credentials by you own ;)
+2. You need to have Twitter developer's credentials. Replace the .env informations by you own ;)
 
 ## Using this bot
 
