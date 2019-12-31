@@ -45,9 +45,8 @@ class Bot {
     }
 
     /**
+     * @param get argument to define routing in dataflow
      * @returns void
-     * 
-     * Used to define roouting in dataflow
      */
     cli_based_query_routing = (argv) => {
         if (argv['tweets'] != undefined) {
@@ -60,10 +59,14 @@ class Bot {
         }
         if (argv['account'] != undefined) {
             let QUERY_PARAMETER = argv['account']
-            this.get_tweets_query_through_account(QUERY_PARAMETER)
+            this.get_tweets_query_from_account(QUERY_PARAMETER)
         }
     }
 
+    /**
+     * @param {QUERY_PARAMETER} information to get from Twitter's Tweet search endpoint 
+     * @returns void
+     */
     get_global_query_through_tweet_tag(QUERY_PARAMETER) {
         fetch(this.TW_API_URL + this.TWEETS_SEARCH_ENDPOINT + QUERY_PARAMETER, {
             method: 'GET',
@@ -71,28 +74,49 @@ class Bot {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data['statuses'])
+            console.log('Querying Tweets using tags: ' + QUERY_PARAMETER)
+            this.write_on_file_system('TWEETS', QUERY_PARAMETER, data['statuses'])
         })
     }
 
-    get_tweets_query_through_account(QUERY_PARAMETER) {
+    /**
+     * @param {QUERY_PARAMETER} information to get from Twitter's Account search endpoint 
+     * @returns void
+     */
+    get_tweets_query_from_account(QUERY_PARAMETER) {
         fetch(this.TW_API_URL + this.ACCOUNT_SEARCH_ENDPOINT + QUERY_PARAMETER, {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + this.BEARER_TOKEN }
         })
         .then(res => res.json())
         .then(data => {
-            console.log('Okay')
+            console.log('Querying Tweets from: ' + QUERY_PARAMETER)
+            this.write_on_file_system('USER', QUERY_PARAMETER, data)
         })
     }
 
-    read_file_then_query_each_account(file) {
-        let data = JSON.parse(file)
+    /**
+     * @param {file} FILE to get data from then map though a function which query data on Twitter's API
+     * @returns void
+     */
+    read_file_then_query_each_account(FILE) {
+        let data = JSON.parse(FILE)
         for(let [key, value] of Object.entries(data)) {
             let screen_name = value['screen_name']
-            console.log('Querying tweet from ' + value['name'])
-            this.get_tweets_query_through_account(screen_name)
+            this.get_tweets_query_from_account(screen_name)
         }
+    }
+
+    /**
+     * @param {QUERY_PARAMETER, DATA} QUERY_PARAMETER=filename; DATA=information to write
+     * @returns void
+     */
+    write_on_file_system(TYPE, QUERY_PARAMETER, DATA) {
+        const selected_directory = __dirname + '/data';
+        !fs.existsSync(selected_directory) && fs.mkdirSync(selected_directory)
+
+        let filename = selected_directory + '/' + TYPE + '-' + QUERY_PARAMETER + '.json'
+        fs.appendFileSync(filename, JSON.stringify(DATA));
     }
 
 }
