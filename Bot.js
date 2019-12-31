@@ -6,7 +6,6 @@ require('dotenv').config(); // Get variables from .env
 import fetch from 'node-fetch'
 
 class Bot {
-
     /**
      * class Attributes
      */
@@ -25,8 +24,7 @@ class Bot {
 
     /**
      * @returns void, 
-     * 
-     * Change state to get BEARER TOKEN
+     * Change state object then choose function destination based on command line interface argument passed
      */
     getIdentityToken() {
         fetch(this.TW_API_URL + 'oauth2/token', {
@@ -45,7 +43,7 @@ class Bot {
     }
 
     /**
-     * @param get argument to define routing in dataflow
+     * @param get argument passed in CLI to define routing in dataflow
      * @returns void
      */
     cli_based_query_routing = (argv) => {
@@ -108,8 +106,9 @@ class Bot {
     }
 
     /**
-     * @param {QUERY_PARAMETER, DATA} QUERY_PARAMETER=filename; DATA=information to write
-     * @returns void
+     * @param {TYPE, QUERY_PARAMETER, DATA} TYPE && QUERY_PARAMETER are used to create proeminient filename; 
+                                            DATA are the information to write
+     * @returns create new files
      */
     write_on_file_system(TYPE, QUERY_PARAMETER, DATA) {
         const selected_directory = __dirname + '/data';

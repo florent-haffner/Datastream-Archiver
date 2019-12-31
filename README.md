@@ -2,7 +2,7 @@
 
 Simple bot written in Node.js to archive data from Twitter to Arweave's Permafeed blockchain.
 
-> It's not fully fonctional, I had to rewrite to program to simplify the dataflow. The current implementation only enable query from Twitter and store on you filesystem.
+> It's not fully fonctional, I had to rewrite to program from Python3 to Node.js to simplify dataflow. The current implementation only enable query from Twitter and store it on you filesystem.
 
 ## Setup
 
@@ -24,8 +24,15 @@ You can also search by tweets-tag or account. Call the programm then give argume
 
     node index.js --account ArweaveTeam
 
+or
+
+    node index.js --tweets linux
+
 ## Program Documentation
 
     node index.js -h
 
-Next step : connecting to Arweave's blockhain network and store data.
+## Next step
+
+1. Automating proeminent data query 
+2. Connecting to Arweave's blockhain network and store Datafeed
