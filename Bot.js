@@ -30,7 +30,9 @@ class Bot {
         fetch(this.TW_API_URL + 'oauth2/token', {
             method: 'POST',
             headers: {
-                'Authorization': 'Basic ' + Buffer.from(this.CONSUMER_API_KEY + ":" + this.API_SECRET_KEY).toString('base64'),
+                'Authorization': 'Basic ' + Buffer.from(
+                    this.CONSUMER_API_KEY + ":" + this.API_SECRET_KEY
+                ).toString('base64'),
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: 'grant_type=client_credentials'
@@ -49,7 +51,7 @@ class Bot {
     cli_based_query_routing = (argv) => {
         if (argv['tweets'] != undefined) {
             let QUERY_PARAMETER = argv['tweets']
-            this.get_global_query_through_tweet_tag(QUERY_PARAMETER)
+            this.query_recent_tweet_based_on_tag(QUERY_PARAMETER)
         }
         if (argv['list'] != undefined) {
             let QUERY_PARAMETER = argv['list']
@@ -57,15 +59,15 @@ class Bot {
         }
         if (argv['account'] != undefined) {
             let QUERY_PARAMETER = argv['account']
-            this.get_tweets_query_from_account(QUERY_PARAMETER)
+            this.query_recent_tweets_from_account(QUERY_PARAMETER)
         }
     }
 
     /**
-     * @param {QUERY_PARAMETER} information to get from Twitter's Tweet search endpoint 
+     * @param {QUERY_PARAMETER} information to get from Twitter's free search endpoint 
      * @returns void
      */
-    get_global_query_through_tweet_tag(QUERY_PARAMETER) {
+    query_recent_tweet_based_on_tag(QUERY_PARAMETER) {
         fetch(this.TW_API_URL + this.TWEETS_SEARCH_ENDPOINT + QUERY_PARAMETER, {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + this.BEARER_TOKEN }
@@ -78,10 +80,10 @@ class Bot {
     }
 
     /**
-     * @param {QUERY_PARAMETER} information to get from Twitter's Account search endpoint 
+     * @param {QUERY_PARAMETER} information to get from Twitter's free search endpoint 
      * @returns void
      */
-    get_tweets_query_from_account(QUERY_PARAMETER) {
+    query_recent_tweets_from_account(QUERY_PARAMETER) {
         fetch(this.TW_API_URL + this.ACCOUNT_SEARCH_ENDPOINT + QUERY_PARAMETER, {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + this.BEARER_TOKEN }
@@ -101,7 +103,7 @@ class Bot {
         let data = JSON.parse(FILE)
         for(let [key, value] of Object.entries(data)) {
             let screen_name = value['screen_name']
-            this.get_tweets_query_from_account(screen_name)
+            this.query_recent_tweets_from_account(screen_name)
         }
     }
 
@@ -121,5 +123,5 @@ class Bot {
 }
 
 
-// Sorry not a JS expert, please send a correct PR if it bother you =D 
+// Sorry not a JS expert, please send a nice PR if it bother you =D 
 new Bot();

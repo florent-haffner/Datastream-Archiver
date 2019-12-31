@@ -3,77 +3,66 @@
     "screen_name": "EmmanuelMacron",
     "name": "Emmanuel Macron",
     "title": "Président",
-    "country": "France",
-    "tweets_fequency_per_day": 0
+    "country": "France"
   },
   {
     "screen_name": "EPhilippePM",
     "name": "Edouard Philippe",
     "title": "Prime Minister",
-    "country": "France",
-    "tweets_fequency_per_day": 0
+    "country": "France"
   },
   {
     "screen_name": "BorisJohnson",
     "name": "Boris Johnson",
     "title": "Prime Minister",
-    "country": "United Kingdom",
-    "tweets_fequency_per_day": 0
+    "country": "United Kingdom"
   },
   {
     "screen_name": "GGJuliePayette",
     "name": "Julie Payette",
     "title": "Governor General of Canada",
-    "country": "Canada",
-    "tweets_fequency_per_day": 0
+    "country": "Canada"
   },
   {
     "screen_name": "CanadianPM",
     "name": "Justin Trudeau",
     "title": "Prime Minister",
-    "country": "Canada",
-    "tweets_fequency_per_day": 0
+    "country": "Canada"
   },
   {
     "screen_name": "RoyalFamily",
     "name": "Elisabetch II",
     "title": "Monarch",
-    "country": "UK + Canada",
-    "tweets_fequency_per_day": 0
+    "country": "UK + Canada"
   },
   {
     "screen_name": "FrankWalterSte3",
     "name": "Frank-Walter Steinmeier",
     "title": "President",
-    "country": "Germany",
-    "tweets_fequency_per_day": 0
+    "country": "Germany"
   },  
   {
     "screen_name": "Quirinale",
     "name": "Sergio Mattarella",
     "title": "Presidenza",
-    "country": "Italy",
-    "tweets_fequency_per_day": 0
+    "country": "Italy"
   },  
   {
     "screen_name": "GiuseppeConteIT",
     "name": "Giuseppe Conte",
     "title": "President of the Council of Ministers of Italy",
-    "country": "Italy",
-    "tweets_fequency_per_day": 0
+    "country": "Italy"
   },  
   {
     "screen_name": "sanchezcastejon",
     "name": "Pedro Sánchez",
     "title": "President of the Government of Spain",
-    "country": "Span",
-    "tweets_fequency_per_day": 0
+    "country": "Span"
   },  
   {
     "screen_name": "realdonaldtrump",
     "name": "Donald Trump",
     "title": "President",
-    "country": "USA",
-    "tweets_fequency_per_day": 0
+    "country": "USA"
   }
 ]
