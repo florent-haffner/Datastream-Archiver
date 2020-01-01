@@ -1,11 +1,12 @@
 // Messy part of the app lol
 var argv = require('./cli_config') // Get cli_arguments
-var fs = require('fs')
 require('dotenv').config(); // Get variables from .env
 
 import fetch from 'node-fetch'
+import { write_on_filesystem } from './repository'
 
-class Bot {
+class Bot 
+{
     /**
      * class Attributes
      */
@@ -36,12 +37,16 @@ class Bot {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: 'grant_type=client_credentials'
-        })
-            .then(res => res.json())
+        }).then(res => {
+                if(res.status >= 400 && res.status < 600) {
+                    throw new Error("Bad Response: verify you credentials or the url endpoint")
+                }
+                return res.json()
+            })
             .then(data => {
                 this.BEARER_TOKEN = data['access_token']
                 this.cli_based_query_routing(argv)
-        })
+        }).catch((err) => { console.error(err) })
     }
 
     /**
@@ -72,11 +77,19 @@ class Bot {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + this.BEARER_TOKEN }
         })
-        .then(res => res.json())
+        .then(res => {
+                if(res.status >= 400 && res.status < 600) {
+                    throw new Error("Bad Response: authorization required or haven't find tweets related to this Hashtag.")
+                }
+                return res.json()
+            })
         .then(data => {
             console.log('Querying Tweets using tags: ' + QUERY_PARAMETER)
-            this.write_on_file_system('TWEETS', QUERY_PARAMETER, data['statuses'])
-        })
+            if(data['statuses'].length == 0) {
+                throw new Error('Not enough recent data containing #Hashtag: ' + QUERY_PARAMETER)
+            }
+            write_on_filesystem('TWEETS', QUERY_PARAMETER, data['statuses'])
+        }).catch((err) => { console.error(err) })
     }
 
     /**
@@ -88,11 +101,16 @@ class Bot {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + this.BEARER_TOKEN }
         })
-        .then(res => res.json())
+        .then(res => {
+            if(res.status >= 400 && res.status < 600) {
+                throw new Error("Bad Response: maybe this Account doesen't exist?")
+            }
+            return res.json()
+        })
         .then(data => {
             console.log('Querying Tweets from: ' + QUERY_PARAMETER)
-            this.write_on_file_system('USER', QUERY_PARAMETER, data)
-        })
+            write_on_filesystem('USER', QUERY_PARAMETER, data)
+        }).catch((err) => { console.error(err) })
     }
 
     /**
@@ -107,21 +125,7 @@ class Bot {
         }
     }
 
-    /**
-     * @param {TYPE, QUERY_PARAMETER, DATA} TYPE && QUERY_PARAMETER are used to create proeminient filename; 
-                                            DATA are the information to write
-     * @returns create new files
-     */
-    write_on_file_system(TYPE, QUERY_PARAMETER, DATA) {
-        const selected_directory = __dirname + '/data';
-        !fs.existsSync(selected_directory) && fs.mkdirSync(selected_directory)
-
-        let filename = selected_directory + '/' + TYPE + '-' + QUERY_PARAMETER + '.json'
-        fs.appendFileSync(filename, JSON.stringify(DATA));
-    }
-
 }
 
-
 // Sorry not a JS expert, please send a nice PR if it bother you =D 
-new Bot();
+var app = new Bot();
