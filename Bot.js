@@ -3,7 +3,7 @@ var argv = require('./cli_config') // Get cli_arguments
 require('dotenv').config(); // Get variables from .env
 
 import fetch from 'node-fetch'
-import { write_on_filesystem } from './repository'
+import { write_on_filesystem, read_arweave_permaweb } from './repository'
 
 class Bot 
 {
@@ -21,6 +21,7 @@ class Bot
 
     constructor() {
         this.getIdentityToken();
+        // read_arweave_permaweb()
     }
 
     /**

@@ -1,4 +1,7 @@
+require('dotenv').config()
+
 import fs from 'fs'
+import Arweave from 'arweave/node'
 
 /**
  * @param {TYPE, QUERY_PARAMETER, DATA} TYPE && QUERY_PARAMETER are used to create proeminient filename; 
@@ -13,4 +16,14 @@ function write_on_filesystem(TYPE, QUERY_PARAMETER, DATA) {
     fs.appendFileSync(filename, JSON.stringify(DATA));
 }
 
-export { write_on_filesystem }
+function read_arweave_permaweb() {
+    const instance = Arweave.init({
+        protocol: process.env.AR_PROTOCOL,
+        host: process.env.AR_HOST,
+        port: process.env.AR_PORT
+    })
+    let info = instance.network.getInfo()
+    info.then(console.log)
+}
+
+export { write_on_filesystem, read_arweave_permaweb }
