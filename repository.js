@@ -17,13 +17,33 @@ function write_on_filesystem(TYPE, QUERY_PARAMETER, DATA) {
 }
 
 function read_arweave_permaweb() {
+    const wallet = process.env.PERMAFEED_WALLET
     const instance = Arweave.init({
         protocol: process.env.AR_PROTOCOL,
-        host: process.env.AR_HOST,
+        host: process.env.AR_NODE_HOST,
         port: process.env.AR_PORT
     })
     let info = instance.network.getInfo()
-    info.then(console.log)
+
+    instance.wallets.getBalance(wallet)
+    .then((balance) => {
+        console.log('Balance of the wallet')
+
+        let winston = balance
+        let ar = instance.ar.arToWinston(balance)
+
+        console.log(winston)
+        // My balance
+
+        console.log(ar)
+        // Wot is this?
+    })
+
+    instance.wallets.getLastTransactionID(wallet)
+    .then((transaction) => {
+        console.log('\nLast transaction of the wallet')
+        console.log(transaction)
+    })
 }
 
 export { write_on_filesystem, read_arweave_permaweb }
