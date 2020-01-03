@@ -18,6 +18,7 @@ class Bot
 
     TWEETS_SEARCH_ENDPOINT = '1.1/search/tweets.json?q='
     ACCOUNT_SEARCH_ENDPOINT = '1.1/statuses/user_timeline.json?screen_name='
+    PREMIUM_30DAYS_ENDPOINT = '1.1/tweets/search/30day/' + process.env.NAMESPACE + '.json?screen_name='
 
     constructor() {
         this.getIdentityToken();
@@ -65,7 +66,11 @@ class Bot
         }
         if (argv['account'] != undefined) {
             let QUERY_PARAMETER = argv['account']
-            this.query_recent_tweets_from_account(QUERY_PARAMETER)
+            this.query_recent_7days_tweets_from_account(QUERY_PARAMETER)
+        }
+        if (argv['premiumaccount'] != undefined) {
+            let QUERY_PARAMETER = argv['premiumaccount']
+            this.query_30days_tweets_from_account(QUERY_PARAMETER)
         }
     }
 
@@ -97,8 +102,29 @@ class Bot
      * @param {QUERY_PARAMETER} information to get from Twitter's free search endpoint 
      * @returns void
      */
-    query_recent_tweets_from_account(QUERY_PARAMETER) {
+    query_recent_7days_tweets_from_account(QUERY_PARAMETER) {
         fetch(this.TW_API_URL + this.ACCOUNT_SEARCH_ENDPOINT + QUERY_PARAMETER, {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer ' + this.BEARER_TOKEN }
+        })
+        .then(res => {
+            if(res.status >= 400 && res.status < 600) {
+                throw new Error("Bad Response: maybe this Account doesen't exist?")
+            }
+            return res.json()
+        })
+        .then(data => {
+            console.log('Querying Tweets from: ' + QUERY_PARAMETER)
+            write_on_filesystem('USER', QUERY_PARAMETER, data)
+        }).catch((err) => { console.error(err) })
+    }
+
+    /**
+     * @param {QUERY_PARAMETER} information to get from Twitter's Premium 30days search endpoint 
+     * @returns void
+     */
+    query_30days_tweets_from_account(QUERY_PARAMETER) {
+        fetch(this.TW_API_URL + this.PREMIUM_30DAYS_ENDPOINT + QUERY_PARAMETER, {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + this.BEARER_TOKEN }
         })
@@ -122,7 +148,7 @@ class Bot
         let data = JSON.parse(FILE)
         for(let [key, value] of Object.entries(data)) {
             let screen_name = value['screen_name']
-            this.query_recent_tweets_from_account(screen_name)
+            this.query_recent_7days_tweets_from_account(screen_name)
         }
     }
 

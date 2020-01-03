@@ -23,6 +23,7 @@ function read_arweave_permaweb() {
         host: process.env.AR_NODE_HOST,
         port: process.env.AR_PORT
     })
+
     let info = instance.network.getInfo()
 
     instance.wallets.getBalance(wallet)
@@ -37,13 +38,14 @@ function read_arweave_permaweb() {
 
         console.log(ar)
         // Wot is this?
-    })
-
     instance.wallets.getLastTransactionID(wallet)
     .then((transaction) => {
         console.log('\nLast transaction of the wallet')
         console.log(transaction)
     })
+})
+
+    
 }
 
 export { write_on_filesystem, read_arweave_permaweb }
