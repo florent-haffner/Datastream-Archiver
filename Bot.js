@@ -18,7 +18,7 @@ class Bot
 
     TWEETS_SEARCH_ENDPOINT = '1.1/search/tweets.json?q='
     ACCOUNT_SEARCH_ENDPOINT = '1.1/statuses/user_timeline.json?screen_name='
-    PREMIUM_30DAYS_ENDPOINT = '1.1/tweets/search/30day/' + process.env.NAMESPACE + '.json?screen_name='
+    PREMIUM_30DAYS_ENDPOINT = '1.1/tweets/search/30day/' + process.env.NAMESPACE + '.json?query='
 
     constructor() {
         this.getIdentityToken();
@@ -68,8 +68,8 @@ class Bot
             let QUERY_PARAMETER = argv['account']
             this.query_recent_7days_tweets_from_account(QUERY_PARAMETER)
         }
-        if (argv['premiumaccount'] != undefined) {
-            let QUERY_PARAMETER = argv['premiumaccount']
+        if (argv['premium'] != undefined) {
+            let QUERY_PARAMETER = argv['premium']
             this.query_30days_tweets_from_account(QUERY_PARAMETER)
         }
     }
@@ -124,7 +124,7 @@ class Bot
      * @returns void
      */
     query_30days_tweets_from_account(QUERY_PARAMETER) {
-        fetch(this.TW_API_URL + this.PREMIUM_30DAYS_ENDPOINT + QUERY_PARAMETER, {
+        fetch(this.TW_API_URL + this.PREMIUM_30DAYS_ENDPOINT + '(from:' + QUERY_PARAMETER + ')', {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + this.BEARER_TOKEN }
         })

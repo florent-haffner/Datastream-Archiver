@@ -19,10 +19,10 @@ const cli_arg = yargs
         alias: 'a',
         description: "Take an Account name in argument and query Twitter free API."
     })
-    .coerce('premiumaccount', function(arg) {
+    .coerce('premium', function(arg) {
         return arg
-    }).option('premiumaccount', {
-        alias: 'pa',
+    }).option('premium', {
+        alias: 'p',
         description: "Take an Account name in argument and query Twitter's Premium API."
     })
     .help().alias('help', 'h')
