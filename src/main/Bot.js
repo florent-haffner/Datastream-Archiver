@@ -26,6 +26,7 @@ class Bot
     }
 
     /**
+     * @param void: query Twitter to get a Token used for each API transaction
      * @returns void, 
      * Change state object then choose function destination based on command line interface argument passed
      */
@@ -52,7 +53,7 @@ class Bot
     }
 
     /**
-     * @param get argument passed in CLI to define routing in dataflow
+     * @param void: get argument passed in CLI to define routing in dataflow
      * @returns void
      */
     cli_based_query_routing() {
@@ -66,7 +67,7 @@ class Bot
         }
         if (cli_arg['account'] != undefined) {
             let QUERY_PARAMETER = cli_arg['account']
-            this.query_recent_7days_tweets_from_account(QUERY_PARAMETER)
+            this.query_30days_tweets_from_account(QUERY_PARAMETER)
         }
         if (cli_arg['premium'] != undefined) {
             let QUERY_PARAMETER = cli_arg['premium']
@@ -75,7 +76,7 @@ class Bot
     }
 
     /**
-     * @param {QUERY_PARAMETER} information to get from Twitter's free search endpoint 
+     * @param QUERY_PARAMETER: information to get from Twitter's API (free search endpoint)
      * @returns void
      */
     query_recent_tweet_based_on_tag(QUERY_PARAMETER) {
@@ -99,7 +100,7 @@ class Bot
     }
 
     /**
-     * @param {QUERY_PARAMETER} information to get from Twitter's free search endpoint 
+     * @param QUERY_PARAMETER: information to get from Twitter's API (free search endpoint)
      * @returns void
      */
     query_recent_7days_tweets_from_account(QUERY_PARAMETER) {
@@ -120,17 +121,17 @@ class Bot
     }
 
     /**
-     * @param {QUERY_PARAMETER} information to get from Twitter's Premium 30days search endpoint 
+     * @param QUERY_PARAMETER: information to get from Twitter's API (Premium 30days endpoint)
      * @returns void
      */
     query_30days_tweets_from_account(QUERY_PARAMETER) {
-        fetch(this.TW_API_URL + this.PREMIUM_30DAYS_ENDPOINT + '(from:' + QUERY_PARAMETER + ')', {
+        fetch(this.TW_API_URL + this.PREMIUM_30DAYS_ENDPOINT + '(from:' + QUERY_PARAMETER + ')&maxResults=250', {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + this.BEARER_TOKEN }
         })
         .then(res => {
             if(res.status >= 400 && res.status < 600) {
-                throw new Error("Bad Response: maybe this Account doesen't exist?")
+                throw new Error("Bad Response: maybe this Account does not exist?")
             }
             return res.json()
         })
@@ -141,14 +142,14 @@ class Bot
     }
 
     /**
-     * @param {file} FILE to get data from then map though a function which query data on Twitter's API
+     * @param file to get data then map though and query data on Twitter's API
      * @returns void
      */
     read_file_then_query_each_account(FILE) {
         let data = JSON.parse(FILE)
         for(let [key, value] of Object.entries(data)) {
             let screen_name = value['screen_name']
-            this.query_recent_7days_tweets_from_account(screen_name)
+            this.query_30days_tweets_from_account(screen_name)
         }
     }
 

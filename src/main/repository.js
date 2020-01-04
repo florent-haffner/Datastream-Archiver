@@ -6,8 +6,8 @@ import Arweave from 'arweave/node'
 /**
  * @param {TYPE, QUERY_PARAMETER, DATA} TYPE && QUERY_PARAMETER are used to create proeminient filename; 
                                         DATA are the information to write
-    * @returns create new files
-    */
+ * @returns void: interact with current directory state
+ */
 function write_on_filesystem(TYPE, QUERY_PARAMETER, DATA) {
     const selected_directory = __dirname + '/data';
     !fs.existsSync(selected_directory) && fs.mkdirSync(selected_directory)
@@ -60,27 +60,25 @@ function read_arweave_permaweb() {
         port: process.env.AR_PORT
     })
 
-    let info = instance.network.getInfo()
-
     instance.wallets.getBalance(wallet)
     .then((balance) => {
         console.log('Balance of the wallet')
-
         let winston = balance
         let ar = instance.ar.arToWinston(balance)
 
         console.log(winston)
-        // My balance
-
         console.log(ar)
-        // Wot is this?
-    instance.wallets.getLastTransactionID(wallet)
-    .then((transaction) => {
-        console.log('\nLast transaction of the wallet')
-        console.log(transaction)
-    })
-})
 
+        instance.wallets.getLastTransactionID(wallet)
+        .then((transaction) => {
+            console.log('\nLast transaction of the wallet')
+            console.log(transaction)
+        })
+    })
+
+    //Time to start with data transaction
+        // Tags: politics, country, date?
+        // ArQL to query back data?
     
 }
 
