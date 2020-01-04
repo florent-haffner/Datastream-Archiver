@@ -1,2 +1,2 @@
 require = require("esm")(module /*, options*/);
-module.exports = require("./Bot");
+module.exports = require("./src/main/Bot");

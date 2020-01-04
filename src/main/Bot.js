@@ -1,9 +1,9 @@
 // Messy part of the app lol
-var argv = require('./cli_config') // Get cli_arguments
 require('dotenv').config(); // Get variables from .env
 
 import fetch from 'node-fetch'
-import { write_on_filesystem, read_arweave_permaweb } from './repository'
+import cli_arg from './cli_config' // Get cli_arguments
+import { write_on_filesystem, create_data_file, read_arweave_permaweb } from './repository'
 
 class Bot 
 {
@@ -47,7 +47,7 @@ class Bot
             })
             .then(data => {
                 this.BEARER_TOKEN = data['access_token']
-                this.cli_based_query_routing(argv)
+                this.cli_based_query_routing(cli_arg)
         }).catch((err) => { console.error(err) })
     }
 
@@ -55,21 +55,21 @@ class Bot
      * @param get argument passed in CLI to define routing in dataflow
      * @returns void
      */
-    cli_based_query_routing = (argv) => {
-        if (argv['tweets'] != undefined) {
-            let QUERY_PARAMETER = argv['tweets']
+    cli_based_query_routing() {
+        if (cli_arg['tweets'] != undefined) {
+            let QUERY_PARAMETER = cli_arg['tweets']
             this.query_recent_tweet_based_on_tag(QUERY_PARAMETER)
         }
-        if (argv['list'] != undefined) {
-            let QUERY_PARAMETER = argv['list']
+        if (cli_arg['list'] != undefined) {
+            let QUERY_PARAMETER = cli_arg['list']
             this.read_file_then_query_each_account(QUERY_PARAMETER)
         }
-        if (argv['account'] != undefined) {
-            let QUERY_PARAMETER = argv['account']
+        if (cli_arg['account'] != undefined) {
+            let QUERY_PARAMETER = cli_arg['account']
             this.query_recent_7days_tweets_from_account(QUERY_PARAMETER)
         }
-        if (argv['premium'] != undefined) {
-            let QUERY_PARAMETER = argv['premium']
+        if (cli_arg['premium'] != undefined) {
+            let QUERY_PARAMETER = cli_arg['premium']
             this.query_30days_tweets_from_account(QUERY_PARAMETER)
         }
     }

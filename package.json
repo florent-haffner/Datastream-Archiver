@@ -4,9 +4,9 @@
   "description": "Archiving Tweets to Arweave's Permafeed blockchain",
   "main": "index.js",
   "dependencies": {
+    "arweave": "^1.6.0",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
-    "hooverd": "^1.0.1",
     "node-fetch": "^2.6.0",
     "yargs": "^15.0.2"
   },

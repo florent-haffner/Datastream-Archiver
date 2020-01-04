@@ -1,4 +1,4 @@
-const yargs = require('yargs'); // CLI-argument parser
+import yargs from 'yargs'
 
 const cli_arg = yargs
     .coerce('list', function(arg) {
@@ -29,4 +29,4 @@ const cli_arg = yargs
     .version('v1.0')
     .argv;
 
-module.exports = cli_arg;
+export default cli_arg;
